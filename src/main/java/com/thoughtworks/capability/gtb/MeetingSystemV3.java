@@ -1,7 +1,9 @@
 package com.thoughtworks.capability.gtb;
 
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 /**
  * 脑洞会议系统v3.0
@@ -20,19 +22,20 @@ public class MeetingSystemV3 {
   public static void main(String[] args) {
     String timeStr = "2020-04-01 14:30:00";
 
-    // 根据格式创建格式化类
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    // 从字符串解析得到会议时间
-    LocalDateTime meetingTime = LocalDateTime.parse(timeStr, formatter);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("GMT"));
+    LocalDateTime londonMeetingTime = LocalDateTime.parse(timeStr, formatter);
+    ZonedDateTime londonZonedDateTime = ZonedDateTime.of(londonMeetingTime, ZoneId.of("GMT"));
 
+    LocalDateTime beijingMeetingTime = londonZonedDateTime.toLocalDateTime();
     LocalDateTime now = LocalDateTime.now();
-    if (now.isAfter(meetingTime)) {
+    if (now.isAfter(beijingMeetingTime)) {
       LocalDateTime tomorrow = now.plusDays(1);
       int newDayOfYear = tomorrow.getDayOfYear();
-      meetingTime = meetingTime.withDayOfYear(newDayOfYear);
+      beijingMeetingTime = beijingMeetingTime.withDayOfYear(newDayOfYear);
 
       // 格式化新会议时间
-      String showTimeStr = formatter.format(meetingTime);
+      DateTimeFormatter chicagoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("America/Chicago"));
+      String showTimeStr = chicagoFormatter.format(beijingMeetingTime);
       System.out.println(showTimeStr);
     } else {
       System.out.println("会议还没开始呢");
