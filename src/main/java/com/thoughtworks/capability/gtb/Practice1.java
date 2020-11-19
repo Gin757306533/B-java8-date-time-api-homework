@@ -11,6 +11,14 @@ import java.time.LocalDate;
 public class Practice1 {
 
   public static long getDaysBetweenNextLaborDay(LocalDate date) {
-    return 0;
+    int nowYear = date.getYear();
+    LocalDate thisYear51 = LocalDate.of(nowYear, 5, 1);
+    if(thisYear51.isAfter(date)){
+      return thisYear51.getDayOfYear() - date.getDayOfYear();
+    }else{
+      int thisYearNeedToWaitDays = LocalDate.of(nowYear, 12, 31).getDayOfYear()
+              - date.getDayOfYear();
+      return thisYearNeedToWaitDays + LocalDate.of(nowYear + 1, 5, 1).getDayOfYear();
+    }
   }
 }
